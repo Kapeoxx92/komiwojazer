@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace komiwojazer
@@ -10,40 +13,57 @@ namespace komiwojazer
         {
             Console.WriteLine("Witaj w komiwojazer");
             string Path = @"C:\Users\K1\Desktop\data.json";
+            List<int> visitedCities = new List<int>();
 
             ReadJson readerJson = new ReadJson(Path);
             List<city> citiesToVisit = readerJson.ReadJsonToList();
 
-            Console.WriteLine(citiesToVisit[0].name);
-            Console.WriteLine(citiesToVisit.Count);
+            //int minimumValueIndex = citiesToVisit.IndexOf(citiesToVisit.Min());
+
+            //Console.WriteLine(citiesToVisit[0].name);
+            // Console.WriteLine(citiesToVisit.Coun
+
+            for (int y = 0; y < citiesToVisit.Count; y++)
+            {
+                //citiesToVisit[y].printcity();
+                citiesToVisit[y].fillDistanceList(citiesToVisit);
+            }
+
+            Console.WriteLine("Wpisz miasto startowe");
+            string startCity = Console.ReadLine();
+
+            for (int y = 0; y < citiesToVisit.Count; y++)
+            {
+                if (startCity == citiesToVisit[y].name)
+                {
+                    //citiesToVisit[y].visited = true;
+                    citiesToVisit[y].visitTheCity();
+                    visitedCities.Add(y);
+                }
+            }
+
+            while (citiesToVisit.Count != visitedCities.Count)
+            {
+                int next_city = citiesToVisit[visitedCities[visitedCities.Count() - 1]].FindCity(citiesToVisit); // 1. szukamy najbliższego miasta do ostatnio odwiedzonego
+                citiesToVisit[next_city].visitTheCity();
+                visitedCities.Add(next_city);
+
+            }
 
 
-            ///*w pętli
-            // * citiesToVisit[i].printcity();
-            // * 
-            // * 
-            // */
-            //int i = 0;
-            //while (i <= 99)
-            //{
-            //    citiesToVisit[i].printcity();
 
-            //    i++;
-            //}
-            //for (int y = 0; y < citiesToVisit.Count; y++)
-            //{
-            //    citiesToVisit[y].printcity();
-            //}
 
+
+            Console.WriteLine("stop");
             /*
              * int odleglosc = cityToVisit[0].calculateDistance(4,3);
              * Console.WriteLine(odleglosc.ToString())*/
             //double distance12 = citiesToVisit[1].countDistance(27, -8);
-            double distance12 = citiesToVisit[1].countDistance(citiesToVisit[2]);
-            citiesToVisit[0].fillDistanceList(citiesToVisit);
-            citiesToVisit[0].printDistanceList();
+            //double distance12 = citiesToVisit[1].countDistance(citiesToVisit[2]);
+            //citiesToVisit[0].fillDistanceList(citiesToVisit);
+            //citiesToVisit[0].printDistanceList();
 
-            Console.WriteLine(distance12);
+            //Console.WriteLine(distance12);
         }
 
         public class city
@@ -52,7 +72,15 @@ namespace komiwojazer
             public int x;
             public int y;
             public List<double> distanceList = new List<double>();
+            private bool visited = false;
             //Console.WriteLine(city.);
+
+            public void visitTheCity()
+            {
+                this.visited = true;
+                string comment = this.name + " has been visited";
+                Console.WriteLine(comment);
+            }
 
             public void fillDistanceList(List<city> cities)
             {
@@ -65,7 +93,33 @@ namespace komiwojazer
                 
             }
 
-            public void printDistanceList()
+            public int FindCity(List<city> otherCities)
+            {
+                int minimumValueIndex = 0;
+                double minimum_value = this.distanceList[0];
+
+                for(int i = 1; i < this.distanceList.Count(); i++)
+                {
+                    if (this.distanceList[i] < minimum_value  && this.distanceList[i] != 0)
+                    {
+                        if (otherCities[i].visited == false)
+                        {
+                            minimum_value = this.distanceList[i];
+                            minimumValueIndex = i;
+                        }
+
+                    }
+                }
+
+                Console.WriteLine("Number miasta ");
+                Console.WriteLine(minimumValueIndex);
+                Console.WriteLine("odleglosc" );
+                Console.WriteLine(distanceList[minimumValueIndex]);
+                return minimumValueIndex;
+                    
+            }
+
+    public void printDistanceList()
             {
                 int i = 0;
                 while(i < this.distanceList.Count())
