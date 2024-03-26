@@ -96,7 +96,19 @@ namespace komiwojazer
             public int FindCity(List<city> otherCities)
             {
                 int minimumValueIndex = 0;
-                double minimum_value = this.distanceList[0];
+                double minimum_value = double.MaxValue;
+
+                //if(minimum_value == 0)
+                //{
+                //    minimum_value = double.MaxValue;
+                //}
+                int k = 0;
+                while (otherCities[k].visited == true)
+                {
+                    k++;
+                }
+                minimumValueIndex = k;
+                minimum_value = this.distanceList[k];
 
                 for(int i = 1; i < this.distanceList.Count(); i++)
                 {
