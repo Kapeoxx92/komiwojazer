@@ -12,7 +12,7 @@ namespace komiwojazer
         static void Main(string[] args)
         {
             Console.WriteLine("Witaj w komiwojazer");
-            string Path = @"C:\Users\K1\Desktop\data.json";
+            string Path = @"C:\Users\K1\Desktop\Prace\C#\data.json";
             List<int> visitedCities = new List<int>();
 
             ReadJson readerJson = new ReadJson(Path);
